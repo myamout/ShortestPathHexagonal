@@ -6,7 +6,7 @@ class Node:
   def __init__(self, location, cost):
     self.location = location
     self.cost = cost
-    self.neighbors = []
+    self.neighbors = {}
     self.visited = False
   
   def set_visited(self):
@@ -20,9 +20,11 @@ class Node:
   
   def to_string(self):
     return "Location: ["+str(self.location)+"], Cost: ["+str(self.cost)+"]"
+
+  def add_neighbors(self, array_of_pointers, graph):
+    for key in array_of_pointers:
+      self.neighbors[key] = graph[key]
   
-  '''
-  def add_neighbor(self...)
-  def get_neighbors(self)
-  To be implemented
-  '''
+  def get_neighbors(self):
+    return self.neighbors
+  
