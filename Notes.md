@@ -8,8 +8,12 @@ A weighted graph is a group of nodes where each edge (line connecting each node)
   - Our Graph data structure will hold node classes
 
 # Algo
-  1. Start at bottom left corner
-  2. Compare neighbors for the cheapest cost
-  3. Move to cheapest neighbor and mark all previously checked neighbors as visited
-  4. Repeat until we've reached the top right corner
+  1. Read in text file
+  2. Build the hexagonal graph
+  3. Apply algo
+
+# Todo
+  1. Start in bottom left corner
+  2. Work our way to the top left corner
+  3. Print out shortest cost path
 
