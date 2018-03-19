@@ -1,3 +1,4 @@
+import time
 from Node import Node
 
 def read_text_build_graph(filename):
@@ -49,10 +50,35 @@ def add_neighbors(graph):
       neighbors = [k-15, k-8, k+7, k+15, k+8, k-7]
       graph[k].add_neighbors(neighbors, graph)
 
+def grab_costs_of_neighbors(neighbors):
+  temp = neighbors.values()
+  costs = []
+  for node in temp:
+    costs.append(node.get_cost())
+  return costs
+
+def find_shortest_path(visited, unvisited, min_cost, path, graph):
+  bool path_found = False
+  # Add starting point, vist it, grab neighbors
+  path.append(graph[226])
+  neighbors = graph[226].get_neighbors()
+  visited.append(graph[226].get_location())
+  unvisited.remove(226)
+  while path_found:
+    costs = grab_costs_of_neighbors(neighbors)
+    updated_costs = [x + min_cost for x in costs]
+    lowest_cost = min(updated_costs)
+
 def main():
+  start_time = time.time()
   graph = read_text_build_graph("test1.txt")
   add_neighbors(graph)
-  
+  visited = []
+  unvisited = graph.keys()
+  min_cost = 0
+  path = []
+  find_shortest_path(visited, unvisited, min_cost, path, graph)
+  print("Run Time: ----%s seconds----" %(time.time() - start_time))
 
 if __name__ == '__main__':
   main()
