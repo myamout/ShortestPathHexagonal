@@ -1,3 +1,7 @@
+'''
+Neighbors Array: Key values for Graph dictionary
+'''
+
 class Node:
   def __init__(self, location, cost):
     self.location = location
@@ -13,6 +17,9 @@ class Node:
   
   def get_cost(self):
     return cost
+  
+  def to_string(self):
+    return "Location: ["+str(self.location)+"], Cost: ["+str(self.cost)+"]"
   
   '''
   def add_neighbor(self...)
