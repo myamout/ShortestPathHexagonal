@@ -12,11 +12,14 @@ class Node:
   def set_visited(self):
     self.visited = True
   
+  def get_visited(self):
+    return self.visited
+  
   def get_location(self):
     return self.location
   
   def get_cost(self):
-    return cost
+    return self.cost
   
   def to_string(self):
     return "Location: ["+str(self.location)+"], Cost: ["+str(self.cost)+"]"

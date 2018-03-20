@@ -50,34 +50,54 @@ def add_neighbors(graph):
       neighbors = [k-15, k-8, k+7, k+15, k+8, k-7]
       graph[k].add_neighbors(neighbors, graph)
 
-def grab_costs_of_neighbors(neighbors):
-  temp = neighbors.values()
-  costs = []
-  for node in temp:
-    costs.append(node.get_cost())
-  return costs
+def grab_costs(test):
+  temp = []
+  for node in test:
+    temp.append(node.get_cost())
+  return temp
 
-def find_shortest_path(visited, unvisited, min_cost, path, graph):
-  bool path_found = False
+def find_shortest_path(min_cost, path, graph):
+  path_found = False
   # Add starting point, vist it, grab neighbors
-  path.append(graph[226])
+  path.append(graph[226].get_location())
   neighbors = graph[226].get_neighbors()
-  visited.append(graph[226].get_location())
-  unvisited.remove(226)
-  while path_found:
-    costs = grab_costs_of_neighbors(neighbors)
-    updated_costs = [x + min_cost for x in costs]
-    lowest_cost = min(updated_costs)
+  graph[226].set_visited()
+  while not path_found:
+    test = []
+    # If any of the neighbors equal -1 mark them as visited so we
+    # don't check there
+    for k, v in neighbors.items():
+      if v.get_cost() == -1:
+        v.set_visited()
+    for k, v in neighbors.items():
+      if not v.get_visited():
+        test.append(v)
+    costs = grab_costs(test)
+    updated_costs = [x+min_cost for x in costs]
+    if not updated_costs:
+      break
+    else:
+      lowest_cost = min(updated_costs)
+    for node in test:
+      node.set_visited()
+      if node.get_cost() - (lowest_cost-min_cost) == 0:
+        path.append(node.get_location())
+        neighbors = node.get_neighbors()
+        min_cost = lowest_cost
+        if node.get_location() == 8:
+          print("FOUND 8")
+          path_found = True
+  print(path)
+  print("Min Cost Total: " + str(min_cost))
+    
 
 def main():
   start_time = time.time()
   graph = read_text_build_graph("test1.txt")
   add_neighbors(graph)
-  visited = []
-  unvisited = graph.keys()
   min_cost = 0
   path = []
-  find_shortest_path(visited, unvisited, min_cost, path, graph)
+  find_shortest_path(min_cost, path, graph)
   print("Run Time: ----%s seconds----" %(time.time() - start_time))
 
 if __name__ == '__main__':
