@@ -1,5 +1,7 @@
+
 import time
 from Node import Node
+
 
 def read_text_build_graph(filename):
   temp_graph = {}
@@ -10,6 +12,7 @@ def read_text_build_graph(filename):
     cost = int(test[1])
     temp_graph[location] = Node(location, cost)
   return temp_graph
+
 
 def add_neighbors(graph):
   for k, v in graph.items():
@@ -50,11 +53,13 @@ def add_neighbors(graph):
       neighbors = [k-15, k-8, k+7, k+15, k+8, k-7]
       graph[k].add_neighbors(neighbors, graph)
 
+
 def grab_costs(test):
   temp = []
   for node in test:
     temp.append(node.get_cost())
   return temp
+
 
 def find_shortest_path(min_cost, path, graph):
   path_found = False
@@ -89,7 +94,7 @@ def find_shortest_path(min_cost, path, graph):
           path_found = True
   print(path)
   print("Min Cost Total: " + str(min_cost))
-    
+
 
 def main():
   start_time = time.time()
@@ -98,7 +103,8 @@ def main():
   min_cost = 0
   path = []
   find_shortest_path(min_cost, path, graph)
-  print("Run Time: ----%s seconds----" %(time.time() - start_time))
+  print("Run Time: ----%s seconds----" % (time.time() - start_time))
+
 
 if __name__ == '__main__':
   main()
