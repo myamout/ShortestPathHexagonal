@@ -115,8 +115,31 @@ func findLowestCostPath(graph map[int]map[int]int, startNode int, endNode int, n
 		opp := len(path) - 1 - index
 		path[index], path[opp] = path[opp], path[index]
 	}
-	fmt.Printf("%v\n", path)
-	fmt.Printf("Lowest Cost: [%d]\n", shortestDistance[endNode]+nodes[startNode])
+	// fmt.Printf("%v\n", path)
+	// fmt.Printf("Lowest Cost: [%d]\n", shortestDistance[endNode]+nodes[startNode])
+	// for _, node := range path {
+	// 	fmt.Println(node)
+	// 	fmt.Println()
+	// }
+	// fmt.Printf("Minimal Path Cost = %d\n", shortestDistance[endNode]+nodes[startNode])
+	// fmt.Println()
+	outputFile, _ := os.Create("test_output_2.txt")
+	defer outputFile.Close()
+	for _, node := range path {
+		fmt.Fprintf(outputFile, "%d\n", node)
+	}
+	fmt.Fprintf(outputFile, "Minimal Path Costs: %d\n", shortestDistance[endNode]+nodes[startNode])
+}
+
+// Remove all the negative ones from the graph
+func removeNegativeOnes(graph map[int]map[int]int) {
+	for _, v := range graph {
+		for node, cost := range v {
+			if cost == -1 {
+				delete(v, node)
+			}
+		}
+	}
 }
 
 func main() {
@@ -125,7 +148,8 @@ func main() {
 	// Initialize vars
 	graph := make(map[int]map[int]int)
 	nodes := make(map[int]int)
-	file, fileError := os.Open("test1.txt")
+	//file, fileError := os.Open("test_input_2.txt")
+	file, fileError := os.Open(os.Args[1])
 	if fileError != nil {
 		fmt.Println(fileError)
 	}
@@ -134,12 +158,19 @@ func main() {
 	for reader.Scan() {
 		line := reader.Text()
 		nums := strings.Split(line, " ")
+		// Added because it seems all of Root's text files
+		// end with two empty lines so we need to stop once we
+		// hit an empty line (it seems empty arrays in Go still have a length of 1 lol)
+		if len(nums) == 1 {
+			break
+		}
 		// Convert lines to ints and add them to the graph
 		location, _ := strconv.Atoi(nums[0])
 		cost, _ := strconv.Atoi(nums[1])
 		nodes[location] = cost
 	}
 	getNeighbors(graph, nodes)
+	removeNegativeOnes(graph)
 	findLowestCostPath(graph, 226, 8, nodes)
 	end := time.Since(start)
 	fmt.Printf("Shortest Path Found In: [%s]\n", end)
